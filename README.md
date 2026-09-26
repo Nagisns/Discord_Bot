@@ -32,12 +32,9 @@ and Discord bot development.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-cd YOUR_REPOSITORY
+git clone https://github.com/Nagisns/Discord_Bot.git
+cd Discord_Bot
 ```
-
-Replace `YOUR_USERNAME` and `YOUR_REPOSITORY` with your
-GitHub username and repository name.
 
 ### 2. Install the dependencies
 
@@ -86,6 +83,11 @@ Send your guesses in the same channel.
 - If you guess correctly, the bot will say `Correct!`.
 
 The game counts your valid integer guesses.
+
+If you do not make a guess within 20 seconds,
+the game ends and the bot reveals the correct number.
+
+The 20-second time limit resets after each guess prompt.
 
 ## License
 

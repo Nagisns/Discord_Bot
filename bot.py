@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 # See the LICENSE file for details.
 
+import asyncio
 import os
 import random
 
@@ -61,7 +62,11 @@ async def guess(ctx: commands.Context) -> None:
     try_counter: int = 0
 
     while True:
-        message: discord.Message = await bot.wait_for("message", check=check_message, timeout=20.0)
+        try:
+            message: discord.Message = await bot.wait_for("message", check=check_message, timeout=20.0)
+        except asyncio.TimeoutError:
+            await ctx.send(f"Time's up! The correct number was {secret_number}.")
+            return
 
         try:
             guess_number: int = int(message.content)
