@@ -18,6 +18,9 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="::", intents=intents)
 
+# This global variable is used in the guess function.
+active_games: set[int] = set()
+
 @bot.event
 async def on_ready() -> None:
     print(f"Logged in as {bot.user}")
@@ -51,7 +54,15 @@ async def luck(ctx: commands.Context) -> None:
 async def guess(ctx: commands.Context) -> None:
     secret_number: int = random.randint(1, 100)
 
-    await ctx.send("I'm thinking of a number between 1 and 100. Guess the number!")
+    channel_id: int = ctx.channel.id
+
+    try_counter: int = 0
+
+    if channel_id not in active_games:
+        active_games.add(channel_id)
+    else:
+        await ctx.send("A game is already running in this channel!")
+        return
 
     def check_message(message: discord.Message) -> bool:
         check_user: bool = ctx.author == message.author
@@ -59,31 +70,34 @@ async def guess(ctx: commands.Context) -> None:
 
         return check_user and check_channel
 
-    try_counter: int = 0
+    try:
+        await ctx.send("I'm thinking of a number between 1 and 100. Guess the number!")
 
-    while True:
-        try:
-            message: discord.Message = await bot.wait_for("message", check=check_message, timeout=20.0)
-        except asyncio.TimeoutError:
-            await ctx.send(f"Time's up! The correct number was {secret_number}.")
-            return
+        while True:
+            try:
+                message: discord.Message = await bot.wait_for("message", check=check_message, timeout=20.0)
+            except asyncio.TimeoutError:
+                await ctx.send(f"Time's up! The correct number was {secret_number}.")
+                return
 
-        try:
-            guess_number: int = int(message.content)
-        except ValueError:
-            await ctx.send("Please enter a valid integer.")
-            continue
+            try:
+                guess_number: int = int(message.content)
+            except ValueError:
+                await ctx.send("Please enter a valid integer.")
+                continue
 
-        try_counter += 1
+            try_counter += 1
 
-        if guess_number > secret_number:
-            await ctx.send("Too high!")
-        elif guess_number < secret_number:
-            await ctx.send("Too low!")
-        else:
-            await ctx.send("Correct!")
-            break
+            if guess_number > secret_number:
+                await ctx.send("Too high!")
+            elif guess_number < secret_number:
+                await ctx.send("Too low!")
+            else:
+                await ctx.send("Correct!")
+                break
 
-    await ctx.send(f"Your try counter is {try_counter}")
+        await ctx.send(f"Your try counter is {try_counter}")
+    finally:
+        active_games.discard(channel_id)
     
 bot.run(TOKEN)
