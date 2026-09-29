@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.3] - 2026-09-30
+
+### Added
+- Added a number range check to the guessing game. Guesses must be between 1 and 100.
+- Added validation for the `TOKEN` environment variable to check whether it is set and not empty. The bot exits with an error message if the variable is missing or contains only whitespace.
+
+### Changed
+- Updated the README in English and Japanese to reflect the new input validation behavior.
+
 ## [1.0.2] - 2026-09-27
 
 This release begins maintaining a changelog for the project.

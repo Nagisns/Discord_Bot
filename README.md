@@ -67,6 +67,9 @@ TOKEN=your_bot_token_here
 Replace `your_bot_token_here` with your bot token. Keep the token private and
 do not commit `.env` to Git.
 
+If the `TOKEN` environment variable is missing or empty, the bot will display
+an error message and exit. Whitespace-only values are also rejected.
+
 ### 5. Run the bot
 
 ```bash
@@ -86,6 +89,8 @@ for guesses from the user who started the game in the same channel.
   of valid integer guesses.
 - Non-integer messages prompt the user to enter a valid integer and do not
   count as guesses.
+- Integer guesses outside the 1–100 range prompt the user to enter a number in
+  range and do not count as guesses.
 - The bot waits up to 20 seconds for each message from the player. If no
   message arrives in that time, the game ends and the bot reveals the number.
 - Only one game can run in each channel at a time.

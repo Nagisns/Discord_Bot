@@ -5,14 +5,22 @@
 import asyncio
 import os
 import random
+import sys
 
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
-TOKEN: str = os.environ["TOKEN"]
-
+try:
+    TOKEN: str = os.environ["TOKEN"]
+    if not TOKEN.strip():
+        print("The TOKEN environment variable is empty.")
+        sys.exit(1)
+except KeyError:
+    print("The TOKEN environment variable is not set.")
+    sys.exit(1)
+    
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -82,6 +90,9 @@ async def guess(ctx: commands.Context) -> None:
 
             try:
                 guess_number: int = int(message.content)
+                if not 1 <= guess_number <= 100:
+                    await ctx.send("Please enter a number between 1 and 100.")
+                    continue
             except ValueError:
                 await ctx.send("Please enter a valid integer.")
                 continue
