@@ -48,7 +48,7 @@ async def ping(ctx: commands.Context) -> None:
     await ctx.send(f"Pong! {latency} ms")
 
 @bot.command()
-async def help(ctx: commands.Context) -> None:
+async def list(ctx: commands.Context) -> None:
     embed = discord.Embed(
         title="Commands List",
         description="ping - Shows the bot's latency in milliseconds.\n " \

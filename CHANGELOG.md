@@ -1,9 +1,25 @@
 # Changelog
 
-## [1.1.0] - ####-##-##
+## [1.1.1] - 2026-10-01
+
+### Fixed
+
+- Renamed the `::help` command to `::list` to avoid a conflict with the default help command provided by `discord.py`.
+
+## [1.1.0] - 2026-10-01
 
 ### Added
-- Introduced the `GuessGame` class to manage guessing game state.
+
+- Added the `ActiveGames` class to manage active games by channel.
+- Added the `GuessGame` class to manage the state and logic of the number guessing game.
+- Added the `::help` command, which displays an embed listing the bot's commands.
+
+### Changed
+
+- Refactored the `::guess` command to use the new `GuessGame` and `ActiveGames` classes.
+- Separated game logic and active game management from the main bot code.
+
+### Added
 
 ## [1.0.3] - 2026-09-30
 

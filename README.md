@@ -19,7 +19,7 @@ created as a learning project to practice Python and Discord bot development.
 | Command | Description |
 |---|---|
 | `::ping` | Displays the bot's latency in milliseconds. |
-| `::help` | Displays an embed listing the bot's commands. |
+| `::list` | Displays an embed listing the bot's commands. |
 | `::luck` | Generates and reports a random luck score. |
 | `::guess` | Starts a number guessing game. |
 
