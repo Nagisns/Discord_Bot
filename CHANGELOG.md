@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.0] - ####-##-##
+
+### Added
+- Introduced the `GuessGame` class to manage guessing game state.
+
 ## [1.0.3] - 2026-09-30
 
 ### Added

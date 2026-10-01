@@ -11,6 +11,9 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from games import GuessGame
+from game_manager import ActiveGames
+
 load_dotenv()
 try:
     TOKEN: str = os.environ["TOKEN"]
@@ -26,8 +29,7 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="::", intents=intents)
 
-# This global variable is used in the guess function.
-active_games: set[int] = set()
+active_game = ActiveGames()
 
 @bot.event
 async def on_ready() -> None:
@@ -46,6 +48,18 @@ async def ping(ctx: commands.Context) -> None:
     await ctx.send(f"Pong! {latency} ms")
 
 @bot.command()
+async def help(ctx: commands.Context) -> None:
+    embed = discord.Embed(
+        title="Commands List",
+        description="ping - Shows the bot's latency in milliseconds.\n " \
+                    "luck - Generates and reports a random luck score.\n" \
+                    "guess - Starts a number guessing game.",
+        colour=discord.Colour.blue()
+        )
+
+    await ctx.send(embed=embed)
+
+@bot.command()
 async def luck(ctx: commands.Context) -> None:
     luck_score: int = random.randint(1, 100)
 
@@ -60,23 +74,16 @@ async def luck(ctx: commands.Context) -> None:
 
 @bot.command()
 async def guess(ctx: commands.Context) -> None:
-    secret_number: int = random.randint(1, 100)
+    game = GuessGame(channel_id=ctx.channel.id, user_id=ctx.author.id)
 
-    channel_id: int = ctx.channel.id
-
-    try_counter: int = 0
-
-    if channel_id not in active_games:
-        active_games.add(channel_id)
+    if active_game.check_active(game.channel_id) is False:
+        active_game.add_channel(game.channel_id, "guess")
     else:
         await ctx.send("A game is already running in this channel!")
         return
 
     def check_message(message: discord.Message) -> bool:
-        check_user: bool = ctx.author == message.author
-        check_channel: bool = ctx.channel == message.channel
-
-        return check_user and check_channel
+        return game.user_id == message.author.id and game.channel_id == message.channel.id
 
     try:
         await ctx.send("I'm thinking of a number between 1 and 100. Guess the number!")
@@ -85,7 +92,7 @@ async def guess(ctx: commands.Context) -> None:
             try:
                 message: discord.Message = await bot.wait_for("message", check=check_message, timeout=20.0)
             except asyncio.TimeoutError:
-                await ctx.send(f"Time's up! The correct number was {secret_number}.")
+                await ctx.send(f"Time's up! The correct number was {game.secret_number}.")
                 return
 
             try:
@@ -97,18 +104,18 @@ async def guess(ctx: commands.Context) -> None:
                 await ctx.send("Please enter a valid integer.")
                 continue
 
-            try_counter += 1
+            result: str = game.check_guess(guess_number)
 
-            if guess_number > secret_number:
+            if result == "high":
                 await ctx.send("Too high!")
-            elif guess_number < secret_number:
+            elif result == "low":
                 await ctx.send("Too low!")
-            else:
+            elif result == "correct":
                 await ctx.send("Correct!")
                 break
 
-        await ctx.send(f"Your try counter is {try_counter}")
+        await ctx.send(f"Your try counter is {game.try_counter}")
     finally:
-        active_games.discard(channel_id)
-    
+        active_game.remove_channel(game.channel_id)
+
 bot.run(TOKEN)

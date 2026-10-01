@@ -7,9 +7,9 @@ created as a learning project to practice Python and Discord bot development.
 
 - **Ping:** Shows the bot's latency in milliseconds.
 - **Luck:** Generates a random luck score from 1 to 100 and displays a result:
-  - 70–100: `Good luck!`
-  - 40–69: `Average luck.`
-  - 1–39: `Bad luck...`
+  - 70-100: `Good luck!`
+  - 40-69: `Average luck.`
+  - 1-39: `Bad luck...`
 - **Guess the Number:** Starts a game in which the bot chooses a number from 1
   to 100. Only the user who started the game can submit guesses, and only one
   game can run in a channel at a time.
@@ -19,6 +19,7 @@ created as a learning project to practice Python and Discord bot development.
 | Command | Description |
 |---|---|
 | `::ping` | Displays the bot's latency in milliseconds. |
+| `::help` | Displays an embed listing the bot's commands. |
 | `::luck` | Generates and reports a random luck score. |
 | `::guess` | Starts a number guessing game. |
 
@@ -73,7 +74,7 @@ an error message and exit. Whitespace-only values are also rejected.
 ### 5. Run the bot
 
 ```bash
-python bot.py
+python src/bot.py
 ```
 
 Once the bot is running, use its commands in a server where it is present.
@@ -89,7 +90,7 @@ for guesses from the user who started the game in the same channel.
   of valid integer guesses.
 - Non-integer messages prompt the user to enter a valid integer and do not
   count as guesses.
-- Integer guesses outside the 1–100 range prompt the user to enter a number in
+- Integer guesses outside the 1-100 range prompt the user to enter a number in
   range and do not count as guesses.
 - The bot waits up to 20 seconds for each message from the player. If no
   message arrives in that time, the game ends and the bot reveals the number.

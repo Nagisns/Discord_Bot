@@ -1,0 +1,58 @@
+# Copyright (c) 2026 Nagi(Nagisns)
+# Licensed under the MIT License.
+# See the LICENSE file for details.
+
+import random
+
+class GuessGame:
+
+    """
+    Manages the state and logic of a number guessing game.
+
+    Game information:
+    -----------------
+    * channel ID
+        - The ID of the channel where the game is running.
+
+    * user ID
+        - The ID of the user playing the game.
+
+    * try counter
+        - Stores the number of valid guesses made by the player.
+
+    * secret number
+        - A randomly generated integer between 1 and 100.
+
+    Methods:
+    --------
+    * increment_counter
+        - Increase the try counter by one.
+        - Optionally return the updated counter.
+
+    * check_guess
+        - Compare the player's guess with the secret number.
+        - Return "low", "correct", or "high".
+    """
+
+    def __init__(self, channel_id: int, user_id: int) -> None:
+        self.channel_id: int = channel_id
+        self.user_id: int = user_id
+        self.try_counter: int = 0
+        self.secret_number: int = random.randint(1, 100)
+
+    def increment_counter(self, return_counter: bool = False) -> None | int:
+        self.try_counter += 1
+
+        if return_counter is True:
+            return self.try_counter
+
+    def check_guess(self, guess_number: int) -> str:
+        self.increment_counter()
+
+        if guess_number < self.secret_number:
+            return "low"
+        elif guess_number == self.secret_number:
+            return "correct"
+        elif guess_number > self.secret_number:
+            return "high"
+        
