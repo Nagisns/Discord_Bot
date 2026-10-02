@@ -3,6 +3,7 @@
 # See the LICENSE file for details.
 
 import random
+from typing import Literal
 
 class GuessGame:
 
@@ -27,7 +28,6 @@ class GuessGame:
     --------
     * increment_counter
         - Increase the try counter by one.
-        - Optionally return the updated counter.
 
     * check_guess
         - Compare the player's guess with the secret number.
@@ -35,18 +35,17 @@ class GuessGame:
     """
 
     def __init__(self, channel_id: int, user_id: int) -> None:
+        self.max_value: int = 100
+        self.min_value: int = 1
         self.channel_id: int = channel_id
         self.user_id: int = user_id
         self.try_counter: int = 0
-        self.secret_number: int = random.randint(1, 100)
+        self.secret_number: int = random.randint(self.min_value, self.max_value)
 
-    def increment_counter(self, return_counter: bool = False) -> None | int:
+    def increment_counter(self) -> None:
         self.try_counter += 1
 
-        if return_counter is True:
-            return self.try_counter
-
-    def check_guess(self, guess_number: int) -> str:
+    def check_guess(self, guess_number: int) -> Literal["low", "correct", "high"]:
         self.increment_counter()
 
         if guess_number < self.secret_number:

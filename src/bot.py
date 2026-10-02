@@ -27,9 +27,9 @@ except KeyError:
 intents = discord.Intents.default()
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="::", intents=intents)
+bot = commands.Bot(command_prefix="::", intents=intents, help_command=None)
 
-active_game = ActiveGames()
+active_games = ActiveGames()
 
 @bot.event
 async def on_ready() -> None:
@@ -40,6 +40,7 @@ async def on_command_error(ctx: commands.Context, error: commands.CommandError) 
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("This command does not exist.")
     else:
+        await ctx.send("An unexpected error occurred.")
         raise error
 
 @bot.command()
@@ -47,12 +48,12 @@ async def ping(ctx: commands.Context) -> None:
     latency = round(bot.latency * 1000)
     await ctx.send(f"Pong! {latency} ms")
 
-@bot.command()
-async def list(ctx: commands.Context) -> None:
+@bot.command(name="help")
+async def help_commands(ctx: commands.Context) -> None:
     embed = discord.Embed(
         title="Commands List",
-        description="ping - Shows the bot's latency in milliseconds.\n " \
-                    "luck - Generates and reports a random luck score.\n" \
+        description="ping - Shows the bot's latency in milliseconds.\n"
+                    "luck - Generates and reports a random luck score.\n"
                     "guess - Starts a number guessing game.",
         colour=discord.Colour.blue()
         )
@@ -76,8 +77,8 @@ async def luck(ctx: commands.Context) -> None:
 async def guess(ctx: commands.Context) -> None:
     game = GuessGame(channel_id=ctx.channel.id, user_id=ctx.author.id)
 
-    if active_game.check_active(game.channel_id) is False:
-        active_game.add_channel(game.channel_id, "guess")
+    if active_games.check_active(game.channel_id) is False:
+        active_games.add_channel(game.channel_id, "guess")
     else:
         await ctx.send("A game is already running in this channel!")
         return
@@ -86,7 +87,7 @@ async def guess(ctx: commands.Context) -> None:
         return game.user_id == message.author.id and game.channel_id == message.channel.id
 
     try:
-        await ctx.send("I'm thinking of a number between 1 and 100. Guess the number!")
+        await ctx.send(f"I'm thinking of a number between {game.min_value} and {game.max_value}. Guess the number!")
 
         while True:
             try:
@@ -97,8 +98,8 @@ async def guess(ctx: commands.Context) -> None:
 
             try:
                 guess_number: int = int(message.content)
-                if not 1 <= guess_number <= 100:
-                    await ctx.send("Please enter a number between 1 and 100.")
+                if not game.min_value <= guess_number <= game.max_value:
+                    await ctx.send(f"Please enter a number between {game.min_value} and {game.max_value}.")
                     continue
             except ValueError:
                 await ctx.send("Please enter a valid integer.")
@@ -116,6 +117,7 @@ async def guess(ctx: commands.Context) -> None:
 
         await ctx.send(f"Your try counter is {game.try_counter}")
     finally:
-        active_game.remove_channel(game.channel_id)
+        active_games.remove_channel(game.channel_id)
 
-bot.run(TOKEN)
+if __name__ == "__main__":
+    bot.run(TOKEN)

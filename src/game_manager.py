@@ -33,12 +33,9 @@ class ActiveGames:
     def __init__(self) -> None:
         self.active_channel: dict[int, str] = {}
 
-    def check_active(self, check_id: int) -> bool:
-        if check_id in self.active_channel:
-            return True
-        else:
-            return False
-        
+    def check_active(self, channel_id: int) -> bool:
+        return channel_id in self.active_channel
+
     def check_info(self, channel_id: int) -> tuple[int, str] | None:
         if self.check_active(channel_id):
             game_name = self.active_channel[channel_id]
@@ -50,5 +47,5 @@ class ActiveGames:
 
     def remove_channel(self, channel_id: int) -> None:
         if self.check_active(channel_id):
-            self.active_channel.pop(channel_id)      
+            self.active_channel.pop(channel_id)     
    

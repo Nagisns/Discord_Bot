@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.2] - 2026-10-02
+
+### Added
+
+Added a user-facing message when an unexpected command error occurs.
+
+### Updated
+
+- Reviewed and improved variable naming conventions.
+- Disabled the default `help_command` in the Bot class and renamed the previous `list` command to `help`.
+- Removed magic numbers from the guessing game by centralizing its minimum and maximum values.
+- Changed the bot startup process so that it runs only when the file is executed as the main module.
+- Simplified redundant code.
+- Updated the `GuessGame` class to use `Literal` for the return type of `check_guess()`.
+
 ## [1.1.1] - 2026-10-01
 
 ### Fixed
