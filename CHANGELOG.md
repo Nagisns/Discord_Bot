@@ -1,12 +1,21 @@
 # Changelog
 
+## [1.1.3] - 2026-10-07
+
+### Added
+
+- Added unit tests for the ActiveGames class using pytest.
+- Added tests for check_active(), check_info(), add_channel(), and remove_channel().
+- Added unit tests for the GuessGame class using pytest.
+- Added tests for increment_counter() and check_guess().
+
 ## [1.1.2] - 2026-10-02
 
 ### Added
 
-Added a user-facing message when an unexpected command error occurs.
+- Added a user-facing message when an unexpected command error occurs.
 
-### Updated
+### Changed
 
 - Reviewed and improved variable naming conventions.
 - Disabled the default `help_command` in the Bot class and renamed the previous `list` command to `help`.
@@ -34,16 +43,16 @@ Added a user-facing message when an unexpected command error occurs.
 - Refactored the `::guess` command to use the new `GuessGame` and `ActiveGames` classes.
 - Separated game logic and active game management from the main bot code.
 
-### Added
-
 ## [1.0.3] - 2026-09-30
 
 ### Added
+
 - Added a number range check to the guessing game. Guesses must be between 1 and 100.
 - Added validation for the `TOKEN` environment variable to check whether it is set and not empty. The bot exits with an error message if the variable is missing or contains only whitespace.
 
 ### Changed
-- Updated the README in English and Japanese to reflect the new input validation behavior.
+
+- Updated the English and Japanese README files to reflect the new input validation behavior.
 
 ## [1.0.2] - 2026-09-27
 
@@ -54,14 +63,14 @@ This release begins maintaining a changelog for the project.
 - Added the Japanese README [`README.ja.md`](README.ja.md).
 - Started the changelog in version 1.0.2; earlier release notes are included below for reference.
 
-### Updated
+### Changed
 
 - Expanded the English README with more detailed descriptions of the commands and guessing game.
 - Documented the luck score result ranges, who can submit guesses, invalid input handling, the per-channel game limit, and the 20-second timeout behavior.
 - Added setup guidance for the Message Content Intent and the channel permissions required by the bot.
 - Fixed garbled text in the English README's luck score ranges.
 
-### Game behavior
+### Game Behavior
 
 - The guessing game accepts guesses only from the user who started it in the same channel.
 - Only one guessing game can run in a channel at a time.
@@ -70,14 +79,15 @@ This release begins maintaining a changelog for the project.
 
 ## [1.0.1] - 2026-09-26
 
-Added a 20-second time limit to the number guessing game.
+### Added
 
+- Added a 20-second time limit to the number guessing game.
 - Added timeout handling using `asyncio.TimeoutError`.
-- Displayed the correct number when the time runs out.
-- Ended the game if the player fails to guess within 20 seconds.
+- Added a message displaying the correct number when the time runs out.
 
-### Update README.md
+### Changed
 
+- Changed the guessing game so that it ends if the player fails to guess within 20 seconds.
 - Updated the Git clone instructions with the correct repository URL.
 - Added instructions for navigating to the `Discord_Bot` directory.
 - Documented the 20-second time limit for each guess.

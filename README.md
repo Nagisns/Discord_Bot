@@ -79,6 +79,18 @@ python src/bot.py
 
 Once the bot is running, use its commands in a server where it is present.
 
+## Testing
+
+This project uses `pytest` for unit testing.
+
+To run the tests:
+
+```bash
+python -m pytest
+```
+
+The tests currently cover the `GuessGame` and `ActiveGames` classes.
+
 ## Guessing Game
 
 Use `::guess` to start. The bot chooses a number between 1 and 100, then waits
